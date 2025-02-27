@@ -1,10 +1,7 @@
-Here's a detailed **README.md** file for your calculator project, emphasizing its use of local AI and **[bolt.diy](https://github.com/stackblitz-labs/bolt.diy)**.
 
----
+## 📊 Calculator with Graphing
 
-## 📊 AI-Powered Scientific Calculator with Graphing
-
-This is a fully **local AI-powered** **scientific calculator with graphing** capabilities, built using **[bolt.diy](https://github.com/stackblitz-labs/bolt.diy)**. The calculator provides **advanced mathematical functions**, **graph plotting in multiple modes (Cartesian, Polar, and Parametric)**, and **memory storage features** while maintaining a sleek, user-friendly interface.
+**Scientific calculator with graphing** capabilities, built using **[bolt.diy](https://github.com/stackblitz-labs/bolt.diy)**, uses HTML. The calculator provides **advanced mathematical functions**, **graph plotting in multiple modes (Cartesian, Polar, and Parametric)**, and **memory storage features** while maintaining a sleek, user-friendly interface.
 
 ⚡ **No external dependencies**—This project runs completely offline, making it **fast, private, and secure**.
 
@@ -36,23 +33,14 @@ This is a fully **local AI-powered** **scientific calculator with graphing** cap
 
 ## 📌 Installation & Usage
 
-This project is built to be **self-hosted** and does not require an internet connection after setup.
-
-### **Option 1: Run Locally (Recommended)**
-1. Clone this repository:
+### **How to Use**
+1. **Download or clone** this repository:
    ```bash
-   git clone https://github.com/YOUR_GITHUB/calculator.git
+   git clone [https://github.com/YOUR_GITHUB](https://github.com/DoingFedTime/htmlCalculator/htmlCalculator.git
    cd calculator
    ```
-2. Open `calculator.html` in a web browser.
-3. **Done!** You can now use the calculator locally.
-
-### **Option 2: Host on Local Server**
-If you want to run it on a **local server**, use:
-```bash
-python -m http.server 8080
-```
-Then, open your browser and visit `http://localhost:8080/calculator.html`.
+2. **Open `calculator.html`** in any modern web browser—no installation required! 🚀  
+3. Start calculating and graphing!
 
 ---
 
