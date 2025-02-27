@@ -3,8 +3,9 @@
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Scientific Calculator</title>
+        <title>Enhanced Scientific Calculator with Graphing</title>
         <style>
+          /* General Styles */
           * {
             margin: 0;
             padding: 0;
@@ -20,12 +21,20 @@
             background: #1a1a1a;
           }
 
+          /* Calculator Container */
+          .calculator-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            width: 1400px;
+          }
+
+          /* Calculator Styles */
           .calculator {
             background: #2c2c2c;
             padding: 2rem;
             border-radius: 15px;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-            width: 400px;
           }
 
           .display {
@@ -35,14 +44,15 @@
             margin-bottom: 20px;
             text-align: right;
             color: #fff;
-            font-size: 2em;
-            height: 80px;
+            font-size: 2.5em;
+            height: 100px;
             overflow-y: auto;
+            word-wrap: break-word;
           }
 
           .buttons {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(6, 1fr);
             gap: 10px;
           }
 
@@ -51,10 +61,11 @@
             border: none;
             background: #333;
             color: #fff;
-            font-size: 1.2em;
+            font-size: 1.4em;
             cursor: pointer;
             border-radius: 5px;
             transition: all 0.3s ease;
+            outline: none;
           }
 
           button:hover {
@@ -82,47 +93,139 @@
           .clear:hover, .delete:hover {
             background: #cc0000;
           }
+
+          /* Graph Container */
+          .graph-container {
+            background: #2c2c2c;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            height: calc(100vh - 80px);
+          }
+
+          #graph-div {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #444;
+          }
+
+          .graph-settings {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+          }
+
+          .mode-selector {
+            padding: 8px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+            margin-bottom: 10px;
+          }
+
+          .function-input {
+            padding: 8px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+            border: none;
+            margin-bottom: 10px;
+          }
+
+          .graph-button {
+            padding: 10px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+          }
+
+          .graph-button:hover {
+            background: #45a049;
+          }
+
+          /* Utility Classes */
+          .hidden {
+            display: none;
+          }
         </style>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
       </head>
       <body>
-        <div class="calculator">
-          <div class="display" id="display">></div>
-          <div class="buttons">
-            <button class="clear" onclick="clearDisplay()">C</button>
-            <button class="delete" onclick="deleteChar()">⌫</button>
-            <button class="function" onclick="addFunction('√')">√</button>
-            <button class="function" onclick="addFunction('%')">%</button>
-            <button class="function" onclick="addFunction('^')">^</button>
-            
-            <button onclick="addNumber('7')">7</button>
-            <button onclick="addNumber('8')">8</button>
-            <button onclick="addNumber('9')">9</button>
-            <button class="operator" onclick="addOperator('/')">/</button>
-            <button class="function" onclick="addFunction('π')">π</button>
-            
-            <button onclick="addNumber('4')">4</button>
-            <button onclick="addNumber('5')">5</button>
-            <button onclick="addNumber('6')">6</button>
-            <button class="operator" onclick="addOperator('*')">×</button>
-            <button class="function" onclick="addFunction('sin')">sin</button>
-            
-            <button onclick="addNumber('1')">1</button>
-            <button onclick="addNumber('2')">2</button>
-            <button onclick="addNumber('3')">3</button>
-            <button class="operator" onclick="addOperator('-')">-</button>
-            <button class="function" onclick="addFunction('cos')">cos</button>
-            
-            <button onclick="addNumber('0')">0</button>
-            <button onclick="addNumber('.')">.</button>
-            <button class="equals" onclick="calculate()">=</button>
-            <button class="operator" onclick="addOperator('+')">+</button>
-            <button class="function" onclick="addFunction('tan')">tan</button>
+        <div class="calculator-container">
+          <div class="calculator">
+            <div class="display" id="display"></div>
+            <button onclick="toggleGraphing()" style="grid-column: span 6; margin-top: 10px;">GRAPHING ▶</button>
+            <div class="buttons">
+              <!-- Memory Functions -->
+              <button onclick="memoryClear()">MC</button>
+              <button onclick="memoryRecall()">MR</button>
+              <button onclick="memoryAdd()">M+</button>
+              <button onclick="memorySubtract()">M-</button>
+              <button class="function" onclick="addFunction('sinh')">sinh</button>
+              <button class="function" onclick="addFunction('cosh')">cosh</button>
+
+              <!-- Standard Buttons -->
+              <button class="clear" onclick="clearDisplay()">C</button>
+              <button class="delete" onclick="deleteChar()">⌫</button>
+              <button class="function" onclick="addFunction('√')">√</button>
+              <button class="function" onclick="addFunction('%')">%</button>
+              <button class="function" onclick="addFunction('^')">^</button>
+              <button class="function" onclick="addFunction('tanh')">tanh</button>
+
+              <button onclick="addNumber('7')">7</button>
+              <button onclick="addNumber('8')">8</button>
+              <button onclick="addNumber('9')">9</button>
+              <button class="operator" onclick="addOperator('/')">/</button>
+              <button class="function" onclick="addFunction('π')">π</button>
+              <button class="function" onclick="addFunction('log')">log</button>
+
+              <button onclick="addNumber('4')">4</button>
+              <button onclick="addNumber('5')">5</button>
+              <button onclick="addNumber('6')">6</button>
+              <button class="operator" onclick="addOperator('*')">×</button>
+              <button class="function" onclick="addFunction('sin')">sin</button>
+              <button class="function" onclick="addFunction('ln')">ln</button>
+
+              <button onclick="addNumber('1')">1</button>
+              <button onclick="addNumber('2')">2</button>
+              <button onclick="addNumber('3')">3</button>
+              <button class="operator" onclick="addOperator('-')">-</button>
+              <button class="function" onclick="addFunction('cos')">cos</button>
+              <button onclick="addFunction('(')">(</button>
+
+              <button onclick="addNumber('0')">0</button>
+              <button onclick="addNumber('.')">.</button>
+              <button class="equals" onclick="calculate()">=</button>
+              <button class="operator" onclick="addOperator('+')">+</button>
+              <button class="function" onclick="addFunction('tan')">tan</button>
+              <button onclick="addFunction(')')">)</button>
+            </div>
+          </div>
+
+          <div class="graph-container hidden" id="graph-container">
+            <div class="graph-settings">
+              <select class="mode-selector" id="modeSelector">
+                <option value="cartesian">Cartesian</option>
+                <option value="polar">Polar</option>
+                <option value="parametric">Parametric</option>
+              </select>
+              <input type="text" class="function-input" id="functionInput" placeholder="Enter function">
+              <button class="graph-button" onclick="plotFunction()">Plot Function</button>
+            </div>
+            <div id="graph-div"></div>
           </div>
         </div>
 
         <script>
           let display = document.getElementById('display');
           let equation = '';
+          let memory = 0;
 
           function updateDisplay() {
             display.textContent = equation;
@@ -139,9 +242,7 @@
           }
 
           function addFunction(func) {
-            if (func === '√') equation += `√`;
-            else if (func === '^') equation += `^`;
-            else equation += `${func}(`;
+            equation += `${func}(`;
             updateDisplay();
           }
 
@@ -155,6 +256,31 @@
             updateDisplay();
           }
 
+          function memoryClear() {
+            memory = 0;
+          }
+
+          function memoryRecall() {
+            equation = memory.toString();
+            updateDisplay();
+          }
+
+          function memoryAdd() {
+            try {
+              memory += eval(equation);
+            } catch (error) {
+              display.textContent = 'Error';
+            }
+          }
+
+          function memorySubtract() {
+            try {
+              memory -= eval(equation);
+            } catch (error) {
+              display.textContent = 'Error';
+            }
+          }
+
           function calculate() {
             try {
               // Replace mathematical constants and functions
@@ -163,7 +289,13 @@
               equation = equation.replace(/sin/g, 'Math.sin');
               equation = equation.replace(/cos/g, 'Math.cos');
               equation = equation.replace(/tan/g, 'Math.tan');
-              
+              equation = equation.replace(/log/g, 'Math.log10');
+              equation = equation.replace(/ln/g, 'Math.log');
+              equation = equation.replace(/sinh/g, 'Math.sinh');
+              equation = equation.replace(/cosh/g, 'Math.cosh');
+              equation = equation.replace(/tanh/g, 'Math.tanh');
+              equation = equation.replace(/\^/g, '**');
+
               // Evaluate the expression safely
               const result = eval(equation);
               equation = result;
@@ -173,6 +305,139 @@
               updateDisplay();
             }
           }
+
+          let graphDiv = document.getElementById('graph-div');
+          let modeSelector = document.getElementById('modeSelector');
+          let functionInput = document.getElementById('functionInput');
+          let graphContainer = document.getElementById('graph-container');
+
+          function initializeGraph() {
+            Plotly.newPlot(graphDiv, [], {
+              title: '',
+              margin: { l: 40, r: 20, t: 30, b: 30 },
+              xaxis: { title: 'x' },
+              yaxis: { title: 'y' }
+            });
+          }
+
+          function plotFunction() {
+            const mode = modeSelector.value;
+            const func = functionInput.value;
+
+            if (!func) return;
+
+            let data = [];
+            let layout = {
+              title: '',
+              margin: { l: 40, r: 20, t: 30, b: 30 },
+              xaxis: { title: 'x' },
+              yaxis: { title: 'y' }
+            };
+
+            switch (mode) {
+              case 'cartesian':
+                data = cartesianPlot(func);
+                break;
+              case 'polar':
+                data = polarPlot(func);
+                break;
+              case 'parametric':
+                data = parametricPlot(func);
+                break;
+            }
+
+            Plotly.react(graphDiv, data, layout);
+          }
+
+          function cartesianPlot(func) {
+            const xValues = [];
+            const yValues = [];
+
+            for (let x = -10; x <= 10; x += 0.1) {
+              try {
+                let y = eval(`(function(x) { return ${func}; })(${x})`);
+                xValues.push(x);
+                yValues.push(y);
+              } catch (e) {
+                console.error("Error evaluating function:", e);
+              }
+            }
+
+            return [{
+              x: xValues,
+              y: yValues,
+              type: 'scatter',
+              mode: 'lines',
+              line: { color: '#4CAF50' }
+            }];
+          }
+
+          function polarPlot(func) {
+            const thetaValues = [];
+            const rValues = [];
+
+            for (let t = 0; t < 2 * Math.PI; t += 0.1) {
+              try {
+                let r = eval(`(function(t) { return ${func}; })(${t})`);
+                thetaValues.push(t);
+                rValues.push(r);
+              } catch (e) {
+                console.error("Error evaluating function:", e);
+              }
+            }
+
+            const xValues = rValues.map((r, i) => r * Math.cos(thetaValues[i]));
+            const yValues = rValues.map((r, i) => r * Math.sin(thetaValues[i]));
+
+            return [{
+              x: xValues,
+              y: yValues,
+              type: 'scatter',
+              mode: 'lines',
+              line: { color: '#4CAF50' }
+            }];
+          }
+
+          function parametricPlot(func) {
+            const tValues = [];
+            const xValues = [];
+            const yValues = [];
+
+            try {
+              let parts = func.split(',');
+              let xFunc = parts[0].trim();
+              let yFunc = parts[1].trim();
+
+              for (let t = 0; t < 2 * Math.PI; t += 0.1) {
+                try {
+                  let x = eval(`(function(t) { return ${xFunc}; })(${t})`);
+                  let y = eval(`(function(t) { return ${yFunc}; })(${t})`);
+                  xValues.push(x);
+                  yValues.push(y);
+                  tValues.push(t);
+                } catch (e) {
+                  console.error("Error evaluating parametric function:", e);
+                }
+              }
+            } catch (e) {
+              console.error("Error parsing parametric function:", e);
+            }
+
+            return [{
+              x: xValues,
+              y: yValues,
+              type: 'scatter',
+              mode: 'lines',
+              line: { color: '#4CAF50' }
+            }];
+          }
+
+          function toggleGraphing() {
+            graphContainer.classList.toggle('hidden');
+          }
+
+          // Initialize graph on page load
+          initializeGraph();
         </script>
       </body>
     </html>
