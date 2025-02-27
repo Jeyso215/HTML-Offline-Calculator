@@ -3,6 +3,8 @@
 
 **Scientific calculator with graphing** capabilities, built using **[bolt.diy](https://github.com/stackblitz-labs/bolt.diy)**, uses HTML. The calculator provides **advanced mathematical functions**, **graph plotting in multiple modes (Cartesian, Polar, and Parametric)**, and **memory storage features** while maintaining a sleek, user-friendly interface.
 
+** Use it live here: ** **[htmlCalculator LIVE](https://doingfedtime.github.io/htmlCalculator/calculator.html)**
+
 ⚡ **No external dependencies**—This project runs completely offline, making it **fast, private, and secure**.
 
 ---
